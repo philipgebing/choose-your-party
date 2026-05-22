@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Choose Your Party — Facebook Ad Carousel</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:    #133B3C;
+    --teal:   #2A8788;
+    --butter: #FBD45A;
+    --cream:  #F6F1E6;
+    --paper:  #FBF7EE;
+    --serif:  "Instrument Serif", Georgia, serif;
+    --sans:   "DM Sans", sans-serif;
+    --mono:   "JetBrains Mono", monospace;
+  }
+
+  body {
+    background: #1a1a1a;
+    font-family: var(--sans);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 80px;
+    min-height: 100vh;
+  }
+
+  h1 {
+    color: #fff;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 22px;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .subtitle {
+    color: rgba(255,255,255,0.45);
+    font-size: 13px;
+    font-family: var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+  }
+
+  /* ── Navigator ── */
+  .nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .nav-btn {
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.5);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .nav-btn.active {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #fff;
+  }
+
+  /* ── Card wrapper (scales the 1080×1080 canvas down) ── */
+  .card-viewport {
+    width: 540px;
+    height: 540px;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  /* ── THE ACTUAL 1080×1080 CARD (rendered at 2x, scaled down 50%) ── */
+  .card {
+    width: 1080px;
+    height: 1080px;
+    transform: scale(0.5);
+    transform-origin: top left;
+    position: absolute;
+    top: 0; left: 0;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .card.visible { display: flex; }
+
+  /* ── Download controls ── */
+  .controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: none;
+  }
+  .btn-primary {
+    background: var(--butter);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .btn-primary:hover { background: #f5ca3a; }
+  .btn-secondary {
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.6);
+  }
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+
+  .specs {
+    color: rgba(255,255,255,0.3);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* ════════════════════════════════════════
+     CARD DESIGNS
+  ════════════════════════════════════════ */
+
+  /* ── Progress bar shared ── */
+  .progress-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 6px;
+    background: rgba(19,59,60,0.12);
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--teal);
+    transition: width 0s;
+  }
+
+  /* ── Card 1: HERO — cream bg ── */
+  #card-1 {
+    background: var(--cream);
+    padding: 72px 80px 80px;
+    justify-content: space-between;
+    position: relative;
+  }
+  #card-1 .tag {
+    font-family: var(--mono);
+    font-size: 20px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--teal);
+    font-weight: 500;
+  }
+  #card-1 .logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  #card-1 .logo-pin {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+  }
+  #card-1 .logo-text {
+    font-family: var(--serif);
+    font-size: 28px;
+    color: var(--ink);
+    line-height: 1;
+  }
+  #card-1 .logo-text em { color: var(--teal); font-style: italic; }
+  #card-1 .headline {
+    font-family: var(--serif);
+    font-size: 108px;
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  #card-1 .headline em { color: var(--teal); font-style: italic; }
+  #card-1 .sub {
+    font-family: var(--sans);
+    font-size: 32px;
+    color: rgba(19,59,60,0.55);
+    line-height: 1.45;
+    max-width: 780px;
+    margin-top: 24px;
+  }
+  #card-1 .swipe {
+    position: absolute;
+    right: 48px;
+    bottom: 56px;
+    font-family: var(--mono);
+    font-size: 20px;
+    color: rgba(19,59,60,0.35);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── Card 2: PROBLEM — dark bg ── */
+  #card-2 {
+    background: var(--ink);
+    padding: 72px 80px 80px;
+    justify-content: space-between;
+    position: relative;
+  }
+  #card-2 .num {
+    font-family: var(--mono);
+    font-size: 20px;
+    color: rgba(251,247,238,0.3);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  #card-2 .headline {
+    font-family: var(--serif);
+    font-size: 88px;
+    font-weight: 400;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+  }
+  #card-2 .headline em { color: var(--butter); font-style: italic; }
+  #card-2 .body {
+    font-family: var(--sans);
+    font-size: 34px;
+    color: rgba(251,247,238,0.6);
+    line-height: 1.5;
+    max-width: 860px;
+  }
+  #card-2 .swipe {
+    position: absolute;
+    right: 48px;
+    bottom: 56px;
+    font-family: var(--mono);
+    font-size: 20px;
+    color: rgba(251,247,238,0.25);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── Card 3: HOW — cream bg ── */
+  #card-3 {
+    background: var(--paper);
+    padding: 72px 80px 80px;
+    justify-content: space-between;
+    position: relative;
+  }
+  #card-3 .num {
+    font-family: var(--mono);
+    font-size: 20px;
+    color: rgba(19,59,60,0.3);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  #card-3 .headline {
+    font-family: var(--serif);
+    font-size: 80px;
+    font-weight: 400;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  #card-3 .headline em { color: var(--teal); font-style: italic; }
+  #card-3 .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  #card-3 .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+  }
+  #card-3 .step-num {
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--teal);
+    font-weight: 500;
+    min-width: 48px;
+    padding-top: 4px;
+  }
+  #card-3 .step-text {
+    font-family: var(--sans);
+    font-size: 32px;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  #card-3 .step-text span {
+    display: block;
+    font-size: 24px;
+    color: rgba(19,59,60,0.5);
+    margin-top: 4px;
+  }
+  #card-3 .swipe {
+    position: absolute;
+    right: 48px;
+    bottom: 56px;
+    font-family: var(--mono);
+    font-size: 20px;
+    color: rgba(19,59,60,0.3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── Card 4: PROOF — dark bg ── */
+  #card-4 {
+    background: #0e2b2c;
+    padding: 72px 80px 80px;
+    justify-content: space-between;
+    position: relative;
+  }
+  #card-4 .num {
+    font-family: var(--mono);
+    font-size: 20px;
+    color: rgba(251,247,238,0.3);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  #card-4 .headline {
+    font-family: var(--serif);
+    font-size: 88px;
+    font-weight: 400;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+  }
+  #card-4 .headline em { color: var(--butter); font-style: italic; }
+  #card-4 .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  #card-4 .pill {
+    font-family: var(--mono);
+    font-size: 22px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+  #card-4 .pill-teal { background: rgba(42,135,136,0.25); color: #6ecfcf; border: 1.5px solid rgba(42,135,136,0.4); }
+  #card-4 .pill-butter { background: rgba(251,212,90,0.15); color: #fbd45a; border: 1.5px solid rgba(251,212,90,0.3); }
+  #card-4 .pill-light { background: rgba(251,247,238,0.08); color: rgba(251,247,238,0.6); border: 1.5px solid rgba(251,247,238,0.15); }
+  #card-4 .swipe {
+    position: absolute;
+    right: 48px;
+    bottom: 56px;
+    font-family: var(--mono);
+    font-size: 20px;
+    color: rgba(251,247,238,0.25);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── Card 5: CTA — teal gradient ── */
+  #card-5 {
+    background: linear-gradient(145deg, #1a4f50 0%, var(--teal) 60%, #3aadae 100%);
+    padding: 72px 80px 80px;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+  }
+  #card-5 .logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  #card-5 .logo-pin {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(251,247,238,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+  }
+  #card-5 .logo-text {
+    font-family: var(--serif);
+    font-size: 28px;
+    color: rgba(251,247,238,0.9);
+    line-height: 1;
+  }
+  #card-5 .logo-text em { color: #fff; font-style: italic; }
+  #card-5 .headline {
+    font-family: var(--serif);
+    font-size: 100px;
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    color: #fff;
+  }
+  #card-5 .domain {
+    font-family: var(--mono);
+    font-size: 28px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    margin-top: 20px;
+  }
+  #card-5 .cta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--butter);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 20px 44px;
+    border-radius: 999px;
+  }
+  #card-5 .free-tag {
+    font-family: var(--mono);
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+  }
+</style>
+</head>
+<body>
+
+<h1>Choose Your Party — Facebook Ads</h1>
+<p class="subtitle">5 carousel cards · 1080 × 1080px · ready to upload</p>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showCard(1)">Card 1</button>
+  <button class="nav-btn" onclick="showCard(2)">Card 2</button>
+  <button class="nav-btn" onclick="showCard(3)">Card 3</button>
+  <button class="nav-btn" onclick="showCard(4)">Card 4</button>
+  <button class="nav-btn" onclick="showCard(5)">Card 5</button>
+</div>
+
+<div class="card-viewport">
+
+  <!-- ═══ CARD 1: HERO ═══ -->
+  <div class="card visible" id="card-1">
+    <div class="logo">
+      <div class="logo-pin">📍</div>
+      <div class="logo-text">Choose Your <em>Party</em></div>
+    </div>
+    <div>
+      <div class="headline">Find parties<br>that actually<br><em>get you.</em></div>
+      <div class="sub">Your group chat is not a search engine. We are.</div>
+    </div>
+    <div class="tag">Event discovery →</div>
+    <div class="swipe">Swipe →</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div>
+  </div>
+
+  <!-- ═══ CARD 2: PROBLEM ═══ -->
+  <div class="card" id="card-2">
+    <div class="num">02 / The problem</div>
+    <div>
+      <div class="headline">"Where's good<br>tonight?" gets<br>you <em>nothing.</em></div>
+    </div>
+    <div class="body">Algorithms show you what's paid for. Your group chat goes quiet. You end up somewhere you didn't really want to be.</div>
+    <div class="swipe">Swipe →</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+  </div>
+
+  <!-- ═══ CARD 3: HOW IT WORKS ═══ -->
+  <div class="card" id="card-3">
+    <div class="num">03 / How it works</div>
+    <div class="headline">Three taps to a<br><em>better</em> night.</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-text">Set your vibe
+          <span>Sweaty + queer. Rooftop + gin. Acoustic + low-key.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-text">Browse tonight's feed
+          <span>Every event filtered in real time. No ads, no filler.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-text">Show up, find your people
+          <span>Real info. Right crowd. The rest is up to you.</span>
+        </div>
+      </div>
+    </div>
+    <div class="swipe">Swipe →</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+  </div>
+
+  <!-- ═══ CARD 4: WHAT YOU KNOW ═══ -->
+  <div class="card" id="card-4">
+    <div class="num">04 / What you get</div>
+    <div>
+      <div class="headline">Know before<br>you <em>go.</em></div>
+    </div>
+    <div class="pills">
+      <div class="pill pill-teal">Crowd size</div>
+      <div class="pill pill-butter">Dress code</div>
+      <div class="pill pill-light">Last call</div>
+      <div class="pill pill-teal">Who's going</div>
+      <div class="pill pill-butter">Cover price</div>
+      <div class="pill pill-light">Vibe check</div>
+    </div>
+    <div class="swipe">Swipe →</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+  </div>
+
+  <!-- ═══ CARD 5: CTA ═══ -->
+  <div class="card" id="card-5">
+    <div class="logo">
+      <div class="logo-pin">📍</div>
+      <div class="logo-text">Choose Your <em>Party</em></div>
+    </div>
+    <div>
+      <div class="headline">Your next<br>great night<br>starts here.</div>
+      <div class="domain">chooseyourparty.club</div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:20px; align-items:flex-start;">
+      <div class="cta-pill">Find a party tonight →</div>
+      <div class="free-tag">Free to browse · No account needed</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+  </div>
+
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="downloadCurrent()">⬇ Download this card</button>
+  <button class="btn btn-secondary" onclick="downloadAll()">⬇ Download all 5</button>
+</div>
+<p class="specs">1080 × 1080px · PNG · Facebook / Instagram feed ready</p>
+
+<script>
+  let current = 1;
+
+  function showCard(n) {
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('visible'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('card-' + n).classList.add('visible');
+    document.querySelectorAll('.nav-btn')[n - 1].classList.add('active');
+    current = n;
+  }
+
+  async function exportCard(n) {
+    const card = document.getElementById('card-' + n);
+    // Make it temporarily visible for capture
+    const wasVisible = card.classList.contains('visible');
+    card.style.display = 'flex';
+    card.style.position = 'fixed';
+    card.style.top = '-9999px';
+    card.style.left = '-9999px';
+    card.style.transform = 'none';
+
+    const canvas = await html2canvas(card, {
+      width: 1080,
+      height: 1080,
+      scale: 1,
+      useCORS: true,
+      logging: false,
+      backgroundColor: null,
+    });
+
+    card.style.display = '';
+    card.style.position = '';
+    card.style.top = '';
+    card.style.left = '';
+    card.style.transform = '';
+    if (!wasVisible) card.style.display = 'none';
+
+    return canvas;
+  }
+
+  async function downloadCurrent() {
+    const btn = event.target;
+    btn.textContent = 'Exporting…';
+    try {
+      const canvas = await exportCard(current);
+      const link = document.createElement('a');
+      link.download = 'cyp-ad-card-' + current + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } finally {
+      btn.textContent = '⬇ Download this card';
+    }
+  }
+
+  async function downloadAll() {
+    const btn = event.target;
+    btn.textContent = 'Exporting all…';
+    for (let i = 1; i <= 5; i++) {
+      btn.textContent = 'Exporting ' + i + '/5…';
+      const canvas = await exportCard(i);
+      const link = document.createElement('a');
+      link.download = 'cyp-ad-card-' + i + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      await new Promise(r => setTimeout(r, 400));
+    }
+    btn.textContent = '⬇ Download all 5';
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' && current < 5) showCard(current + 1);
+    if (e.key === 'ArrowLeft' && current > 1) showCard(current - 1);
+  });
+</script>
+</body>
+</html>
