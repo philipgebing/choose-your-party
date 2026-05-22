@@ -3,489 +3,980 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Find parties and events tonight that match your vibe. Get personalized event recommendations based on what you actually like.">
-  <meta name="theme-color" content="#1a1a3e">
+  <meta name="description" content="Find parties and events tonight that match your vibe. Personalized event recommendations based on what you actually like.">
+  <meta name="theme-color" content="#0b0b1e">
+  <title>CHOOSE YOUR PARTY — Find Events That Match Your Vibe</title>
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Choose Your Party — Find Events That Match Your Vibe">
-  <meta property="og:description" content="Get personalized event recommendations based on what you actually like. Stop scrolling, start going.">
-  <meta property="og:type" content="website">
-
-  <title>Choose Your Party — Find Events That Match Your Vibe</title>
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="css/main.css">
-
-  <!-- Preload fonts -->
+  <!-- Fonts — loaded here, not via @import in CSS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── Reset ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { min-height: 100dvh; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    img, picture, video, svg { display: block; max-width: 100%; }
+    button { cursor: pointer; border: none; background: none; font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    ul, ol { list-style: none; }
+    h1,h2,h3,h4,h5,h6 { text-wrap: balance; }
+    p { text-wrap: pretty; }
+    :focus-visible { outline: 2px solid #60a5fa; outline-offset: 3px; border-radius: 3px; }
+    :focus:not(:focus-visible) { outline: none; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ── Tokens ──────────────────────────────────────── */
+    :root {
+      --bg:       #0b0b1e;
+      --bg-2:     #0f0f25;
+      --bg-3:     #13132d;
+      --text:     #f5f3ef;
+      --muted:    rgba(245,243,239,0.5);
+      --subtle:   rgba(245,243,239,0.07);
+      --amber:    #f59e0b;
+      --amber-lt: #fbbf24;
+      --cyan:     #60a5fa;
+      --serif:    'Cormorant Garamond', Georgia, serif;
+      --sans:     'Outfit', system-ui, sans-serif;
+      --nav-h:    68px;
+      --gutter:   clamp(1.25rem, 4vw, 2.5rem);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --z-nav:    40;
+    }
+
+    /* ── Base ────────────────────────────────────────── */
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* ── Nav — acquired.fm: minimal, no clutter ──────── */
+    .nav {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: var(--z-nav);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      background: rgba(11,11,30,0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid transparent;
+      padding: 0 var(--gutter);
+      padding-left: max(var(--gutter), env(safe-area-inset-left));
+      padding-right: max(var(--gutter), env(safe-area-inset-right));
+      transition: border-color 0.25s ease;
+    }
+    .nav.scrolled { border-bottom-color: var(--subtle); }
+
+    .nav-inner {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Wordmark — acquired uses plain bold text, no icon */
+    .nav-wordmark {
+      font-family: var(--sans);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
+
+    /* Pill buttons — acquired.fm style */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.5rem 1.125rem;
+      min-height: 40px;
+      min-width: 44px;
+      border-radius: 9999px;
+      border: 1px solid rgba(245,243,239,0.25);
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      background: transparent;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .pill:hover { background: rgba(245,243,239,0.06); border-color: rgba(245,243,239,0.45); }
+    .pill:active { transform: scale(0.97); }
+    .pill.amber {
+      background: var(--amber);
+      border-color: var(--amber);
+      color: #0b0b1e;
+    }
+    .pill.amber:hover { background: var(--amber-lt); border-color: var(--amber-lt); }
+
+    /* Mobile: hide quiz pill on small screens */
+    @media (max-width: 480px) { .pill.quiz { display: none; } }
+
+    /* ── Hero — acquired approach: grid IS the hero ──── */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      padding-top: var(--nav-h);
+    }
+
+    /* Tagline zone — equivalent to acquired's near-empty warm top area */
+    .hero-intro {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(2.5rem, 6vw, 4.5rem) var(--gutter) clamp(2rem, 4vw, 3rem);
+      text-align: center;
+      position: relative;
+    }
+
+    /* Subtle radial glow behind the intro text — like acquired's warm vignette */
+    .hero-intro::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 100% at 50% 0%, rgba(96,165,250,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-label {
+      font-family: var(--sans);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      animation: up 0.7s var(--ease-out) 0.1s forwards;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.05;
+      max-width: 16ch;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: up 0.7s var(--ease-out) 0.2s forwards;
+    }
+
+    .hero-sub {
+      font-family: var(--sans);
+      font-size: clamp(0.875rem, 1.5vw, 1rem);
+      color: var(--muted);
+      max-width: 44ch;
+      margin-bottom: 0;
+      opacity: 0;
+      animation: up 0.7s var(--ease-out) 0.32s forwards;
+    }
+
+    /* ── Vibe Grid — acquired.fm card grid translated ── */
+    /* On acquired: full-width 4-col grid of episode cards */
+    /* Here: event vibe cards with solid color backgrounds + typographic names */
+    .vibe-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 0 6px 6px;
+      opacity: 0;
+      animation: fade 0.9s var(--ease-out) 0.45s forwards;
+    }
+
+    @media (max-width: 900px) { .vibe-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 500px) { .vibe-grid { grid-template-columns: repeat(2, 1fr); gap: 4px; padding: 0 4px 4px; } }
+
+    /* Each card — mimics acquired's image cards exactly */
+    .vcard {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 1.125rem;
+      cursor: pointer;
+      transition: transform 0.3s var(--ease-out), opacity 0.3s ease;
+    }
+    .vcard:hover { transform: scale(1.015); }
+    .vcard:hover .vcard-name { opacity: 1; }
+
+    /* Background fills — each event vibe has its own color identity */
+    .vcard-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .vcard-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.5;
+    }
+
+    /* Big display name — centered, editorial, like acquired's company logos */
+    .vcard-display {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      padding: 1rem;
+      gap: 0.5rem;
+    }
+
+    .vcard-icon {
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      line-height: 1;
+      opacity: 0.85;
+    }
+
+    .vcard-name {
+      font-family: var(--serif);
+      font-size: clamp(1.125rem, 2.5vw, 1.875rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      text-align: center;
+      opacity: 0.9;
+      transition: opacity 0.2s ease;
+    }
+
+    /* Pill badge — top-left, exactly like acquired's episode label */
+    .vcard-badge {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.625rem;
+      border-radius: 9999px;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      font-family: var(--sans);
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.9);
+    }
+
+    /* ── CTA below the grid — acquired's "EXPLORE ACQUIRED ↓" ── */
+    .discover-cta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: clamp(2rem, 5vw, 3.5rem) var(--gutter);
+      gap: 1.5rem;
+      opacity: 0;
+      animation: up 0.7s var(--ease-out) 0.8s forwards;
+    }
+
+    .discover-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2.25rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(245,243,239,0.2);
+      background: rgba(245,243,239,0.06);
+      font-family: var(--sans);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .discover-btn:hover {
+      background: rgba(245,243,239,0.1);
+      border-color: rgba(245,243,239,0.4);
+      transform: translateY(-1px);
+    }
+    .discover-btn svg { transition: transform 0.3s var(--ease-out); }
+    .discover-btn:hover svg { transform: translateY(3px); }
+
+    /* ── Content sections ─────────────────────────────── */
+    .section { padding: clamp(5rem, 10vw, 8rem) var(--gutter); }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-inner.narrow { max-width: 680px; }
+    .section-inner.centered { text-align: center; }
+
+    .eyebrow {
+      font-family: var(--sans);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 1.25rem;
+    }
+
+    .heading {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .body-text {
+      font-family: var(--sans);
+      font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 54ch;
+    }
+
+    .rule {
+      width: 40px;
+      height: 1px;
+      background: var(--cyan);
+      border: none;
+      margin: 1.75rem 0;
+    }
+    .centered .rule { margin: 1.75rem auto; }
+
+    /* ── How it works ─────────────────────────────────── */
+    .how-bg { background: var(--bg-2); }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+    @media (max-width: 900px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 500px) { .steps { grid-template-columns: 1fr; } }
+
+    .step-num {
+      font-family: var(--serif);
+      font-size: 3.5rem;
+      font-weight: 700;
+      font-style: italic;
+      color: rgba(96,165,250,0.15);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .step-title {
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .step-body {
+      font-family: var(--sans);
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── Testimonials ─────────────────────────────────── */
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+    @media (max-width: 800px) { .testimonials { grid-template-columns: 1fr; } }
+
+    .tcard {
+      padding: 2rem;
+      border: 1px solid var(--subtle);
+      border-radius: 12px;
+      background: var(--bg-2);
+      border-left: 2px solid var(--amber);
+    }
+
+    .tcard-quote {
+      font-family: var(--serif);
+      font-size: clamp(1.0625rem, 1.75vw, 1.25rem);
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+    }
+
+    .tcard-name {
+      font-family: var(--sans);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── FAQ ──────────────────────────────────────────── */
+    .faq-bg { background: var(--bg-2); }
+    .faq-list { margin-top: 3rem; }
+
+    .faq-item { border-bottom: 1px solid var(--subtle); }
+    .faq-item:first-child { border-top: 1px solid var(--subtle); }
+
+    .faq-q {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.375rem 0;
+      font-family: var(--sans);
+      font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+      font-weight: 500;
+      color: var(--text);
+      text-align: left;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.15s ease;
+    }
+    .faq-q:hover { color: var(--cyan); }
+
+    .faq-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      color: var(--cyan);
+      transition: transform 0.3s var(--ease-out);
+    }
+    [data-open="true"] .faq-icon { transform: rotate(45deg); }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s var(--ease-out);
+    }
+    [data-open="true"] .faq-a { max-height: 240px; }
+
+    .faq-a-inner {
+      padding-bottom: 1.5rem;
+      font-family: var(--sans);
+      font-size: 0.9375rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 60ch;
+    }
+
+    /* ── Final CTA ────────────────────────────────────── */
+    .cta-section {
+      background: var(--bg);
+      border-top: 1px solid var(--subtle);
+      padding: clamp(6rem, 12vw, 10rem) var(--gutter);
+      text-align: center;
+    }
+
+    .cta-title {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.1;
+      max-width: 20ch;
+      margin: 0 auto 1.25rem;
+    }
+
+    .cta-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 46ch;
+      margin: 0 auto 2.5rem;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2.5rem;
+      border-radius: 9999px;
+      background: var(--amber);
+      border: 1px solid var(--amber);
+      font-family: var(--sans);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #0b0b1e;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cta-btn:hover { background: var(--amber-lt); transform: translateY(-2px); }
+    .cta-btn:active { transform: scale(0.97); }
+
+    /* ── Footer ───────────────────────────────────────── */
+    .footer {
+      background: var(--bg);
+      border-top: 1px solid var(--subtle);
+      padding: 2.5rem var(--gutter);
+      padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+    .footer-link {
+      font-size: 0.75rem;
+      color: rgba(245,243,239,0.3);
+      transition: color 0.15s ease;
+    }
+    .footer-link:hover { color: var(--text); }
+    .footer-copy {
+      font-size: 0.75rem;
+      color: rgba(245,243,239,0.2);
+    }
+
+    /* ── Scroll reveal — CSS-only via animation ──────── */
+    /* Sections animate in once when they enter the viewport.
+       We use a sentinel approach: default visible, animates from bottom. */
+    .reveal {
+      animation: reveal-up 0.7s var(--ease-out) both;
+    }
+
+    @keyframes reveal-up {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Stagger children via nth-child delays */
+    .stagger > *:nth-child(1) { animation-delay: 0ms; }
+    .stagger > *:nth-child(2) { animation-delay: 90ms; }
+    .stagger > *:nth-child(3) { animation-delay: 180ms; }
+    .stagger > *:nth-child(4) { animation-delay: 270ms; }
+
+    /* Sections below the hero — revealed via IntersectionObserver */
+    .js-reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    }
+    .js-reveal.in { opacity: 1; transform: none; }
+
+    /* ── Keyframes ────────────────────────────────────── */
+    @keyframes up {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fade {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════════════════
-       NAVIGATION
-  ═══════════════════════════════════════════════════════ -->
-  <header role="banner">
-    <nav class="nav" id="nav" aria-label="Main navigation">
-      <div class="nav-inner">
+<!-- ══════════════════════════════════════════════════════
+     NAV — acquired.fm approach: wordmark + 2 pill buttons
+══════════════════════════════════════════════════════ -->
+<header role="banner">
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <div class="nav-inner">
 
-        <!-- Logo -->
-        <a href="#" class="nav-logo" aria-label="Choose Your Party — home">
-          <div class="nav-logo-mark" aria-hidden="true">✦</div>
-          <div class="nav-logo-text">
-            Choose Your Party
-            <span>Event Discovery</span>
-          </div>
-        </a>
+      <a href="#" class="nav-wordmark" aria-label="Choose Your Party — home">
+        CHOOSE YOUR PARTY
+      </a>
 
-        <!-- Desktop links -->
-        <ul class="nav-links" role="list" aria-label="Site sections">
-          <li><a href="#tonight" class="nav-link">Tonight</a></li>
-          <li><a href="#why" class="nav-link">Why</a></li>
-          <li><a href="#how" class="nav-link">How It Works</a></li>
-          <li><a href="#faq" class="nav-link">FAQ</a></li>
-        </ul>
+      <div class="nav-actions">
+        <a href="#how" class="pill quiz" aria-label="Take the quiz">Quiz</a>
+        <a href="#cta"  class="pill amber" aria-label="Find events near you">Find Events</a>
+      </div>
 
-        <!-- Desktop CTA -->
-        <div class="nav-actions">
-          <a href="#cta" class="btn btn-amber btn-sm" aria-label="Find events near you">Find Events</a>
-        </div>
+    </div>
+  </nav>
+</header>
 
-        <!-- Mobile hamburger -->
-        <button
-          class="nav-hamburger"
-          id="nav-hamburger"
-          aria-label="Open navigation menu"
-          aria-expanded="false"
-          aria-controls="nav-mobile"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
+<main>
+
+<!-- ══════════════════════════════════════════════════════
+     HERO — acquired.fm pattern:
+     Small intro text above → full-bleed card grid → explore CTA
+══════════════════════════════════════════════════════ -->
+<section class="hero" id="tonight" aria-labelledby="hero-title">
+
+  <!-- Intro — acquired.fm has a warm, near-empty top section -->
+  <div class="hero-intro">
+    <span class="hero-label">Event Discovery</span>
+    <h1 class="hero-title" id="hero-title">
+      Find parties that <em>actually</em> get&nbsp;you
+    </h1>
+    <p class="hero-sub">
+      Tell us your vibe. We'll show you what's on tonight that matches it.
+    </p>
+  </div>
+
+  <!-- Vibe card grid — the content IS the hero, like acquired's episode grid -->
+  <div class="vibe-grid" role="list" aria-label="Event vibes">
+
+    <!-- Card 1: Techno -->
+    <article class="vcard" role="listitem" tabindex="0" aria-label="Techno Night events"
+      style="background: linear-gradient(145deg, #0d061e 0%, #1a0a3e 100%);">
+      <span class="vcard-badge">TONIGHT</span>
+      <div class="vcard-display">
+        <span class="vcard-icon" aria-hidden="true" style="color:#c4b5fd;">◈</span>
+        <span class="vcard-name" style="color:#e9d5ff;">Techno<br>Night</span>
+      </div>
+    </article>
+
+    <!-- Card 2: Jazz Lounge -->
+    <article class="vcard" role="listitem" tabindex="0" aria-label="Jazz Lounge events"
+      style="background: linear-gradient(145deg, #120208 0%, #2a0a14 100%);">
+      <span class="vcard-badge">FEATURED</span>
+      <div class="vcard-display">
+        <span class="vcard-icon" aria-hidden="true" style="color:#d4a853;">♪</span>
+        <span class="vcard-name" style="color:#f5d78e;">Jazz<br>Lounge</span>
+      </div>
+    </article>
+
+    <!-- Card 3: Rooftop -->
+    <article class="vcard" role="listitem" tabindex="0" aria-label="Rooftop Party events"
+      style="background: linear-gradient(145deg, #160806 0%, #3e1a0a 100%);">
+      <span class="vcard-badge">TONIGHT</span>
+      <div class="vcard-display">
+        <span class="vcard-icon" aria-hidden="true" style="color:#f59e0b;">⬟</span>
+        <span class="vcard-name" style="color:#fde68a;">Rooftop<br>Party</span>
+      </div>
+    </article>
+
+    <!-- Card 4: Indie -->
+    <article class="vcard" role="listitem" tabindex="0" aria-label="Indie Rock events"
+      style="background: linear-gradient(145deg, #021208 0%, #0a2e14 100%);">
+      <span class="vcard-badge">WEEKEND</span>
+      <div class="vcard-display">
+        <span class="vcard-icon" aria-hidden="true" style="color:#6ee7b7;">⚡</span>
+        <span class="vcard-name" style="color:#a7f3d0;">Indie<br>Rock</span>
+      </div>
+    </article>
+
+    <!-- Card 5: Hip Hop -->
+    <article class="vcard" role="listitem" tabindex="0" aria-label="Hip Hop events"
+      style="background: linear-gradient(145deg, #0d0802 0%, #2a1802 100%);">
+      <span class="vcard-badge">TONIGHT</span>
+      <div class="vcard-display">
+        <span class="vcard-icon" aria-hidden="true" style="color:#fbbf24;">◉</span>
+        <span class="vcard-name" style="color:#fde68a;">Hip<br>Hop</span>
+      </div>
+    </article>
+
+    <!-- Card 6: House -->
+    <article class="vcard" role="listitem" tabindex="0" aria-label="House Music events"
+      style="background: linear-gradient(145deg, #020e1a 0%, #02255c 100%);">
+      <span class="vcard-badge">TONIGHT</span>
+      <div class="vcard-display">
+        <span class="vcard-icon" aria-hidden="true" style="color:#60a5fa;">▲</span>
+        <span class="vcard-name" style="color:#bfdbfe;">House<br>Music</span>
+      </div>
+    </article>
+
+    <!-- Card 7: Open Mic -->
+    <article class="vcard" role="listitem" tabindex="0" aria-label="Open Mic events"
+      style="background: linear-gradient(145deg, #080e18 0%, #0e1e32 100%);">
+      <span class="vcard-badge">WEEKLY</span>
+      <div class="vcard-display">
+        <span class="vcard-icon" aria-hidden="true" style="color:#93c5fd;">🎤</span>
+        <span class="vcard-name" style="color:#dbeafe;">Open<br>Mic</span>
+      </div>
+    </article>
+
+    <!-- Card 8: Latin Night -->
+    <article class="vcard" role="listitem" tabindex="0" aria-label="Latin Night events"
+      style="background: linear-gradient(145deg, #18020a 0%, #3e0514 100%);">
+      <span class="vcard-badge">FRIDAY</span>
+      <div class="vcard-display">
+        <span class="vcard-icon" aria-hidden="true" style="color:#f87171;">♦</span>
+        <span class="vcard-name" style="color:#fecaca;">Latin<br>Night</span>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- Explore CTA — exactly like acquired's "EXPLORE ACQUIRED ↓" -->
+  <div class="discover-cta">
+    <a href="#how" class="discover-btn" aria-label="See how Choose Your Party works">
+      DISCOVER YOUR VIBE
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+    </a>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     HOW IT WORKS
+══════════════════════════════════════════════════════ -->
+<section class="section how-bg" id="how" aria-labelledby="how-title">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="eyebrow">The Process</span>
+      <h2 class="heading" id="how-title">From quiz to night out in minutes</h2>
+      <hr class="rule" aria-hidden="true">
+      <p class="body-text">No complicated setup. Just honest answers and a night worth&nbsp;going&nbsp;out&nbsp;for.</p>
+    </div>
+    <div class="steps stagger reveal">
+      <div>
+        <p class="step-num" aria-hidden="true">01</p>
+        <h3 class="step-title">Answer like a human</h3>
+        <p class="step-body">Be honest about what you actually like. No judgment, no wrong answers.</p>
+      </div>
+      <div>
+        <p class="step-num" aria-hidden="true">02</p>
+        <h3 class="step-title">We match events</h3>
+        <p class="step-body">Our algorithm surfaces parties and events aligned with your actual vibe.</p>
+      </div>
+      <div>
+        <p class="step-num" aria-hidden="true">03</p>
+        <h3 class="step-title">See what's on tonight</h3>
+        <p class="step-body">Browse recommended events in your area with real details on each.</p>
+      </div>
+      <div>
+        <p class="step-num" aria-hidden="true">04</p>
+        <h3 class="step-title">Go find your people</h3>
+        <p class="step-body">Show up, meet others who share your interests, have a night.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     TESTIMONIALS
+══════════════════════════════════════════════════════ -->
+<section class="section" id="proof" aria-labelledby="proof-title">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="eyebrow">People finding their nights</span>
+      <h2 class="heading" id="proof-title">You're not the only one&nbsp;looking</h2>
+      <hr class="rule" aria-hidden="true">
+    </div>
+    <div class="testimonials stagger reveal">
+      <article class="tcard">
+        <blockquote class="tcard-quote">"I thought I'd be alone with my taste in music. Turns out there's a whole crowd at The Ballroom every Thursday."</blockquote>
+        <p class="tcard-name">Alex — Portland, OR</p>
+      </article>
+      <article class="tcard">
+        <blockquote class="tcard-quote">"This helped me find venues I actually wanted to go to. I'd been going to the same two bars for two years."</blockquote>
+        <p class="tcard-name">Jordan — Austin, TX</p>
+      </article>
+      <article class="tcard">
+        <blockquote class="tcard-quote">"I took the quiz expecting nothing. Ended up at an open mic that became my favorite Thursday night thing."</blockquote>
+        <p class="tcard-name">Sam — Chicago, IL</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     FAQ
+══════════════════════════════════════════════════════ -->
+<section class="section faq-bg" id="faq" aria-labelledby="faq-title">
+  <div class="section-inner narrow">
+    <div class="reveal">
+      <span class="eyebrow">FAQ</span>
+      <h2 class="heading" id="faq-title">Questions you probably have</h2>
+      <hr class="rule" aria-hidden="true">
+    </div>
+    <div class="faq-list reveal" role="list" aria-label="Frequently asked questions">
+
+      <div class="faq-item" role="listitem" data-open="false">
+        <button class="faq-q" aria-expanded="false" aria-controls="fq1" id="fq1-btn">
+          Is this really based on my vibe?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
         </button>
-
+        <div class="faq-a" id="fq1" role="region" aria-labelledby="fq1-btn">
+          <p class="faq-a-inner">Yes. We ask about what you actually like — music, atmosphere, crowd, energy — and match you with events that fit. No algorithm judgment, just discovery.</p>
+        </div>
       </div>
-    </nav>
 
-    <!-- Mobile menu drawer -->
-    <div class="nav-mobile" id="nav-mobile" role="dialog" aria-label="Navigation menu" aria-modal="true" hidden>
-      <ul role="list" aria-label="Site sections">
-        <li><a href="#tonight" class="nav-link">Tonight</a></li>
-        <li><a href="#why" class="nav-link">Why</a></li>
-        <li><a href="#how" class="nav-link">How It Works</a></li>
-        <li><a href="#faq" class="nav-link">FAQ</a></li>
+      <div class="faq-item" role="listitem" data-open="false">
+        <button class="faq-q" aria-expanded="false" aria-controls="fq2" id="fq2-btn">
+          What kind of events are on here?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-a" id="fq2" role="region" aria-labelledby="fq2-btn">
+          <p class="faq-a-inner">Concerts, parties, festivals, open mics, club nights, venue events — whatever's happening in your area that matches your interests.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem" data-open="false">
+        <button class="faq-q" aria-expanded="false" aria-controls="fq3" id="fq3-btn">
+          How is this different from other event apps?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-a" id="fq3" role="region" aria-labelledby="fq3-btn">
+          <p class="faq-a-inner">We don't just list events. We recommend events based on your actual preferences. It's like having a friend who knows your taste and tells you what's on.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem" data-open="false">
+        <button class="faq-q" aria-expanded="false" aria-controls="fq4" id="fq4-btn">
+          Is my data private?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-a" id="fq4" role="region" aria-labelledby="fq4-btn">
+          <p class="faq-a-inner">Yes. We're not selling your data or tracking you across the web. Your preferences stay between you and us.</p>
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem" data-open="false">
+        <button class="faq-q" aria-expanded="false" aria-controls="fq5" id="fq5-btn">
+          What if I'm into weird stuff?
+          <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-a" id="fq5" role="region" aria-labelledby="fq5-btn">
+          <p class="faq-a-inner">That's the point. We find events for every taste, every interest, every vibe. Weird is good — it means there's a scene out there waiting for you.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     FINAL CTA
+══════════════════════════════════════════════════════ -->
+<section class="cta-section" id="cta" aria-labelledby="cta-title">
+  <div class="reveal">
+    <span class="eyebrow" style="color:var(--amber);">Ready?</span>
+    <h2 class="cta-title" id="cta-title">Start discovering parties tonight</h2>
+    <p class="cta-sub">See what's happening in your area based on what you actually like. Takes about two minutes.</p>
+    <a href="#" class="cta-btn" aria-label="Discover events near you tonight">
+      Discover Events Now
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════ -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <span class="nav-wordmark" style="font-size:0.75rem; letter-spacing:0.12em;">CHOOSE YOUR PARTY</span>
+    <nav aria-label="Footer navigation">
+      <ul class="footer-links" role="list">
+        <li><a href="#" class="footer-link">About</a></li>
+        <li><a href="#" class="footer-link">Contact</a></li>
+        <li><a href="#" class="footer-link">Privacy</a></li>
+        <li><a href="#" class="footer-link">Terms</a></li>
       </ul>
-      <a href="#cta" class="btn btn-amber">Find Events</a>
-    </div>
-  </header>
+    </nav>
+    <p class="footer-copy">&copy; <span id="yr"></span> Choose Your Party</p>
+  </div>
+</footer>
 
-  <main id="main-content">
+<script>
+'use strict';
 
-    <!-- ═══════════════════════════════════════════════════
-         HERO
-    ═══════════════════════════════════════════════════ -->
-    <section class="hero" id="tonight" aria-labelledby="hero-title">
+// Year
+const yr = document.getElementById('yr');
+if (yr) yr.textContent = new Date().getFullYear();
 
-      <!-- Background layers -->
-      <div class="hero-bg" aria-hidden="true"></div>
-      <div class="hero-photo" aria-hidden="true" role="presentation"></div>
-      <div class="hero-overlay" aria-hidden="true"></div>
+// Nav scroll state
+const nav = document.getElementById('nav');
+function onScroll() {
+  nav?.classList.toggle('scrolled', window.scrollY > 20);
+}
+onScroll();
+window.addEventListener('scroll', onScroll, { passive: true });
 
-      <!-- Animated bokeh lights (CSS party atmosphere) -->
-      <div class="hero-bokeh" aria-hidden="true">
-        <div class="bokeh-dot" style="width:180px;height:180px;background:var(--cyan);left:12%;top:25%;--dur:10s;--delay:0s;--max-opacity:0.09;"></div>
-        <div class="bokeh-dot" style="width:120px;height:120px;background:var(--amber);left:75%;top:40%;--dur:13s;--delay:2s;--max-opacity:0.1;"></div>
-        <div class="bokeh-dot" style="width:90px;height:90px;background:var(--cyan);left:55%;top:15%;--dur:9s;--delay:4s;--max-opacity:0.08;"></div>
-        <div class="bokeh-dot" style="width:200px;height:200px;background:var(--amber);left:85%;top:65%;--dur:14s;--delay:1s;--max-opacity:0.06;"></div>
-        <div class="bokeh-dot" style="width:60px;height:60px;background:var(--cyan);left:35%;top:70%;--dur:7s;--delay:3s;--max-opacity:0.12;"></div>
-      </div>
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    const offset = (nav?.offsetHeight ?? 68) + 16;
+    window.scrollTo({ top: target.getBoundingClientRect().top + scrollY - offset, behavior: 'smooth' });
+  });
+});
 
-      <!-- Content -->
-      <div class="hero-content">
+// FAQ accordion — full keyboard nav (ARIA 1.1 accordion pattern)
+document.querySelectorAll('.faq-item').forEach((item, i, items) => {
+  const btn = item.querySelector('.faq-q');
+  if (!btn) return;
 
-        <p class="hero-kicker" aria-label="Event discovery platform">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/>
-          </svg>
-          Events for every vibe
-        </p>
+  btn.addEventListener('click', () => {
+    const open = item.dataset.open === 'true';
+    items.forEach(it => { it.dataset.open = 'false'; it.querySelector('.faq-q')?.setAttribute('aria-expanded','false'); });
+    if (!open) { item.dataset.open = 'true'; btn.setAttribute('aria-expanded','true'); }
+  });
 
-        <h1 class="hero-title" id="hero-title">
-          Find parties that <em>actually</em> get you
-        </h1>
+  btn.addEventListener('keydown', e => {
+    const fns = { Home: 0, End: items.length-1, ArrowDown: i+1, ArrowUp: i-1 };
+    if (!(e.key in fns)) return;
+    e.preventDefault();
+    const idx = typeof fns[e.key] === 'number' ? fns[e.key] : null;
+    if (idx != null && items[Math.max(0,Math.min(idx,items.length-1))]) {
+      items[Math.max(0,Math.min(idx,items.length-1))].querySelector('.faq-q')?.focus();
+    }
+  });
+});
 
-        <p class="hero-sub">
-          Tell us what you're into — music, atmosphere, crowd, energy. We'll show you what's happening tonight that matches your vibe.
-        </p>
+// Scroll reveal for below-fold sections (.js-reveal)
+// .reveal elements are CSS-animation driven (no JS needed)
+if ('IntersectionObserver' in window) {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0 });
+  document.querySelectorAll('.js-reveal').forEach(el => obs.observe(el));
+} else {
+  document.querySelectorAll('.js-reveal').forEach(el => el.classList.add('in'));
+}
 
-        <div class="hero-actions">
-          <a href="#cta" class="btn btn-cyan btn-lg">Discover Events</a>
-          <a href="#how" class="btn btn-ghost btn-lg">Take the Quiz</a>
-        </div>
-
-        <div class="hero-social-proof">
-          <div class="stat-badge">
-            <span class="dot" aria-hidden="true"></span>
-            <span>1,200+ people finding their crowd tonight</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Scroll indicator -->
-      <div class="hero-scroll" aria-hidden="true">
-        <div class="scroll-mouse"></div>
-        <span>Scroll</span>
-      </div>
-
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════
-         WHY THIS MATTERS
-    ═══════════════════════════════════════════════════ -->
-    <section class="why section" id="why" aria-labelledby="why-title">
-      <div class="container">
-
-        <div class="reveal">
-          <span class="section-eyebrow">Why Choose Your Party</span>
-          <h2 class="section-title" id="why-title">Stop guessing. Start going.</h2>
-          <hr class="divider" aria-hidden="true">
-        </div>
-
-        <div class="why-grid stagger-children">
-
-          <!-- Card 1 -->
-          <article class="card card-accent-left reveal">
-            <div class="icon-badge" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="22" height="22">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z"/>
-              </svg>
-            </div>
-            <h3 class="why-card-title">Recommendations just for you</h3>
-            <p class="why-card-body">Stop scrolling endlessly. Tell us what you like and we'll show you events that match your vibe — not the generic stuff, the stuff you'll actually enjoy.</p>
-          </article>
-
-          <!-- Card 2 -->
-          <article class="card card-accent-left reveal">
-            <div class="icon-badge" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="22" height="22">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/>
-              </svg>
-            </div>
-            <h3 class="why-card-title">Find your crowd</h3>
-            <p class="why-card-body">Discover venues and events where people who share your interests actually hang out. Show up knowing you're in the right room.</p>
-          </article>
-
-          <!-- Card 3 -->
-          <article class="card card-accent-left reveal">
-            <div class="icon-badge" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="22" height="22">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
-              </svg>
-            </div>
-            <h3 class="why-card-title">See what's on tonight</h3>
-            <p class="why-card-body">Know what's happening in your area, right now, based on what you actually enjoy. Concerts, parties, open mics, club nights — whatever fits your mood.</p>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════
-         HOW IT WORKS
-    ═══════════════════════════════════════════════════ -->
-    <section class="how section" id="how" aria-labelledby="how-title">
-      <div class="container">
-
-        <div class="how-header reveal">
-          <span class="section-eyebrow">The Process</span>
-          <h2 class="section-title" id="how-title">From quiz to night out in minutes</h2>
-          <p class="section-subtitle">No complicated setup. No endless registration. Just honest answers and a night worth remembering.</p>
-        </div>
-
-        <ol class="how-steps stagger-children" role="list">
-
-          <li class="step reveal">
-            <div class="step-circle" aria-hidden="true">1</div>
-            <h3 class="step-label">Answer questions like a human</h3>
-            <p class="step-body">Be honest about what you actually like. No judgment, no wrong answers. We're not grading you.</p>
-          </li>
-
-          <li class="step reveal">
-            <div class="step-circle" aria-hidden="true">2</div>
-            <h3 class="step-label">We find events that match</h3>
-            <p class="step-body">Our algorithm surfaces parties and events aligned with your vibe — not just what's popular, what's right for you.</p>
-          </li>
-
-          <li class="step reveal">
-            <div class="step-circle" aria-hidden="true">3</div>
-            <h3 class="step-label">See what's on tonight</h3>
-            <p class="step-body">Browse recommended events in your area with real details — venue, vibe, what to expect when you show up.</p>
-          </li>
-
-          <li class="step reveal">
-            <div class="step-circle" aria-hidden="true">4</div>
-            <h3 class="step-label">Go out and find your people</h3>
-            <p class="step-body">Show up, meet others who share your interests, have a night. It's simpler than it sounds.</p>
-          </li>
-
-        </ol>
-
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════
-         SOCIAL PROOF
-    ═══════════════════════════════════════════════════ -->
-    <section class="proof section" id="proof" aria-labelledby="proof-title">
-      <div class="container">
-
-        <div class="reveal">
-          <span class="section-eyebrow">People finding their nights</span>
-          <h2 class="section-title" id="proof-title">You're not the only one looking</h2>
-          <hr class="divider" aria-hidden="true">
-        </div>
-
-        <div class="proof-grid">
-
-          <!-- Stats column -->
-          <div class="proof-stats stagger-children">
-
-            <div class="proof-stat reveal">
-              <p class="proof-stat-number"><em>3,200</em>+</p>
-              <p class="proof-stat-label">people discovered new favorite venues this month</p>
-            </div>
-
-            <div class="proof-stat reveal">
-              <p class="proof-stat-number"><em>50</em>+</p>
-              <p class="proof-stat-label">events matched with people in your city right now</p>
-            </div>
-
-            <div class="proof-stat reveal">
-              <p class="proof-stat-number"><em>9 in 10</em></p>
-              <p class="proof-stat-label">say they found events they wouldn't have found otherwise</p>
-            </div>
-
-          </div>
-
-          <!-- Testimonials column -->
-          <div class="testimonials stagger-children">
-
-            <article class="testimonial-card reveal" aria-label="Testimonial from Alex, Portland">
-              <blockquote class="testimonial-quote">
-                "I thought I'd be alone with my taste in music. Turns out there's a whole crowd at The Ballroom every Thursday."
-              </blockquote>
-              <p class="testimonial-attribution">Alex — Portland, OR</p>
-            </article>
-
-            <article class="testimonial-card reveal" aria-label="Testimonial from Jordan, Austin">
-              <blockquote class="testimonial-quote">
-                "This helped me find venues I actually wanted to go to. I'd been using the same two bars for two years."
-              </blockquote>
-              <p class="testimonial-attribution">Jordan — Austin, TX</p>
-            </article>
-
-            <article class="testimonial-card reveal" aria-label="Testimonial from Sam, Chicago">
-              <blockquote class="testimonial-quote">
-                "I took the quiz expecting nothing. Ended up at an open mic that became my favorite Thursday night thing."
-              </blockquote>
-              <p class="testimonial-attribution">Sam — Chicago, IL</p>
-            </article>
-
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════
-         FAQ
-    ═══════════════════════════════════════════════════ -->
-    <section class="faq section" id="faq" aria-labelledby="faq-title">
-      <div class="container">
-
-        <div class="faq-layout">
-
-          <!-- Sticky label -->
-          <div class="faq-sticky reveal">
-            <span class="section-eyebrow">FAQ</span>
-            <h2 class="section-title" id="faq-title">Questions you probably have</h2>
-            <hr class="divider" aria-hidden="true">
-            <p class="section-subtitle">Honest answers. No corporate speak.</p>
-          </div>
-
-          <!-- Accordion -->
-          <div role="list" id="faq-list" aria-label="Frequently asked questions">
-
-            <div class="faq-item" role="listitem" data-open="false">
-              <button
-                class="faq-question"
-                aria-expanded="false"
-                aria-controls="faq-1-answer"
-                id="faq-1-question"
-              >
-                Is this really based on my vibe?
-                <span class="faq-icon" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-                  </svg>
-                </span>
-              </button>
-              <div class="faq-answer" id="faq-1-answer" role="region" aria-labelledby="faq-1-question">
-                <p class="faq-answer-inner">Yes. We ask questions about what you actually like — music, atmosphere, crowd, energy — and match you with events that fit. No algorithm judgment, just discovery.</p>
-              </div>
-            </div>
-
-            <div class="faq-item" role="listitem" data-open="false">
-              <button
-                class="faq-question"
-                aria-expanded="false"
-                aria-controls="faq-2-answer"
-                id="faq-2-question"
-              >
-                What kind of events are on here?
-                <span class="faq-icon" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-                  </svg>
-                </span>
-              </button>
-              <div class="faq-answer" id="faq-2-answer" role="region" aria-labelledby="faq-2-question">
-                <p class="faq-answer-inner">Concerts, parties, festivals, open mics, club nights, venue events — whatever's happening in your area that matches your interests. Big names and hidden gems.</p>
-              </div>
-            </div>
-
-            <div class="faq-item" role="listitem" data-open="false">
-              <button
-                class="faq-question"
-                aria-expanded="false"
-                aria-controls="faq-3-answer"
-                id="faq-3-question"
-              >
-                Can I really meet people?
-                <span class="faq-icon" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-                  </svg>
-                </span>
-              </button>
-              <div class="faq-answer" id="faq-3-answer" role="region" aria-labelledby="faq-3-question">
-                <p class="faq-answer-inner">Absolutely. You'll be at events with people who share your interests. Whether you connect with them is up to you — we just put you in the right room.</p>
-              </div>
-            </div>
-
-            <div class="faq-item" role="listitem" data-open="false">
-              <button
-                class="faq-question"
-                aria-expanded="false"
-                aria-controls="faq-4-answer"
-                id="faq-4-question"
-              >
-                How is this different from other event apps?
-                <span class="faq-icon" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-                  </svg>
-                </span>
-              </button>
-              <div class="faq-answer" id="faq-4-answer" role="region" aria-labelledby="faq-4-question">
-                <p class="faq-answer-inner">We don't just list events. We recommend events based on your actual preferences. It's like having a friend who knows your taste and tells you what's on — instead of a wall of everything happening everywhere.</p>
-              </div>
-            </div>
-
-            <div class="faq-item" role="listitem" data-open="false">
-              <button
-                class="faq-question"
-                aria-expanded="false"
-                aria-controls="faq-5-answer"
-                id="faq-5-question"
-              >
-                Is my data private?
-                <span class="faq-icon" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-                  </svg>
-                </span>
-              </button>
-              <div class="faq-answer" id="faq-5-answer" role="region" aria-labelledby="faq-5-question">
-                <p class="faq-answer-inner">Yes. We're not selling your data or tracking you across the web. Your preferences stay between you and us. Simple as that.</p>
-              </div>
-            </div>
-
-            <div class="faq-item" role="listitem" data-open="false">
-              <button
-                class="faq-question"
-                aria-expanded="false"
-                aria-controls="faq-6-answer"
-                id="faq-6-question"
-              >
-                What if I'm into weird stuff?
-                <span class="faq-icon" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-                  </svg>
-                </span>
-              </button>
-              <div class="faq-answer" id="faq-6-answer" role="region" aria-labelledby="faq-6-question">
-                <p class="faq-answer-inner">That's the point. We find events for every taste, every interest, every vibe. Weird is good. Weird means there's a scene out there waiting for you — we'll help you find it.</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════
-         FINAL CTA
-    ═══════════════════════════════════════════════════ -->
-    <section class="cta-section section" id="cta" aria-labelledby="cta-title">
-      <div class="container">
-        <div class="cta-inner reveal">
-          <span class="section-eyebrow">Ready?</span>
-          <h2 class="cta-title" id="cta-title">Start discovering parties tonight</h2>
-          <p class="cta-sub">See what's happening in your area based on what you actually like. Takes about two minutes.</p>
-          <a href="#" class="btn btn-amber btn-lg" aria-label="Discover events near you tonight">Discover Events Now</a>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ═══════════════════════════════════════════════════════
-       FOOTER
-  ═══════════════════════════════════════════════════════ -->
-  <footer class="footer" role="contentinfo">
-    <div class="container">
-      <div class="footer-inner">
-
-        <a href="#" class="nav-logo" aria-label="Choose Your Party — home">
-          <div class="nav-logo-mark" aria-hidden="true">✦</div>
-          <div class="nav-logo-text">
-            Choose Your Party
-            <span>Event Discovery</span>
-          </div>
-        </a>
-
-        <nav aria-label="Footer navigation">
-          <ul class="footer-links" role="list">
-            <li><a href="#" class="footer-link">About</a></li>
-            <li><a href="#" class="footer-link">Contact</a></li>
-            <li><a href="#" class="footer-link">Privacy</a></li>
-            <li><a href="#" class="footer-link">Terms</a></li>
-          </ul>
-        </nav>
-
-        <p class="footer-copy">
-          &copy; <span id="year"></span> Choose Your Party. All rights reserved.
-        </p>
-
-      </div>
-    </div>
-  </footer>
-
-  <script src="js/main.js"></script>
+// Vibe card keyboard interaction
+document.querySelectorAll('.vcard').forEach(card => {
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+  });
+});
+</script>
 </body>
 </html>
