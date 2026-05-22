@@ -92,11 +92,17 @@
     transform-origin: top left;
     position: absolute;
     top: 0; left: 0;
-    display: none;
+    display: flex;
     flex-direction: column;
     overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
   }
-  .card.visible { display: flex; }
+  .card.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
   /* ── Download controls ── */
   .controls {
@@ -572,13 +578,13 @@
 
   async function exportCard(n) {
     const card = document.getElementById('card-' + n);
-    // Make it temporarily visible for capture
-    const wasVisible = card.classList.contains('visible');
-    card.style.display = 'flex';
+    // Temporarily lift out of scaled viewport for accurate capture
     card.style.position = 'fixed';
     card.style.top = '-9999px';
     card.style.left = '-9999px';
     card.style.transform = 'none';
+    card.style.opacity = '1';
+    card.style.pointerEvents = 'none';
 
     const canvas = await html2canvas(card, {
       width: 1080,
@@ -589,12 +595,12 @@
       backgroundColor: null,
     });
 
-    card.style.display = '';
     card.style.position = '';
     card.style.top = '';
     card.style.left = '';
     card.style.transform = '';
-    if (!wasVisible) card.style.display = 'none';
+    card.style.opacity = '';
+    card.style.pointerEvents = '';
 
     return canvas;
   }
