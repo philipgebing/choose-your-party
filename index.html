@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Find parties and events tonight that match your vibe. Get personalized event recommendations based on what you actually like.">
+  <meta name="theme-color" content="#1a1a3e">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Choose Your Party — Find Events That Match Your Vibe">
+  <meta property="og:description" content="Get personalized event recommendations based on what you actually like. Stop scrolling, start going.">
+  <meta property="og:type" content="website">
+
+  <title>Choose Your Party — Find Events That Match Your Vibe</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- Preload fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════
+       NAVIGATION
+  ═══════════════════════════════════════════════════════ -->
+  <header role="banner">
+    <nav class="nav" id="nav" aria-label="Main navigation">
+      <div class="nav-inner">
+
+        <!-- Logo -->
+        <a href="#" class="nav-logo" aria-label="Choose Your Party — home">
+          <div class="nav-logo-mark" aria-hidden="true">✦</div>
+          <div class="nav-logo-text">
+            Choose Your Party
+            <span>Event Discovery</span>
+          </div>
+        </a>
+
+        <!-- Desktop links -->
+        <ul class="nav-links" role="list" aria-label="Site sections">
+          <li><a href="#tonight" class="nav-link">Tonight</a></li>
+          <li><a href="#why" class="nav-link">Why</a></li>
+          <li><a href="#how" class="nav-link">How It Works</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+        </ul>
+
+        <!-- Desktop CTA -->
+        <div class="nav-actions">
+          <a href="#cta" class="btn btn-amber btn-sm" aria-label="Find events near you">Find Events</a>
+        </div>
+
+        <!-- Mobile hamburger -->
+        <button
+          class="nav-hamburger"
+          id="nav-hamburger"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          aria-controls="nav-mobile"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+      </div>
+    </nav>
+
+    <!-- Mobile menu drawer -->
+    <div class="nav-mobile" id="nav-mobile" role="dialog" aria-label="Navigation menu" aria-modal="true" hidden>
+      <ul role="list" aria-label="Site sections">
+        <li><a href="#tonight" class="nav-link">Tonight</a></li>
+        <li><a href="#why" class="nav-link">Why</a></li>
+        <li><a href="#how" class="nav-link">How It Works</a></li>
+        <li><a href="#faq" class="nav-link">FAQ</a></li>
+      </ul>
+      <a href="#cta" class="btn btn-amber">Find Events</a>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- ═══════════════════════════════════════════════════
+         HERO
+    ═══════════════════════════════════════════════════ -->
+    <section class="hero" id="tonight" aria-labelledby="hero-title">
+
+      <!-- Background layers -->
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-photo" aria-hidden="true" role="presentation"></div>
+      <div class="hero-overlay" aria-hidden="true"></div>
+
+      <!-- Animated bokeh lights (CSS party atmosphere) -->
+      <div class="hero-bokeh" aria-hidden="true">
+        <div class="bokeh-dot" style="width:180px;height:180px;background:var(--cyan);left:12%;top:25%;--dur:10s;--delay:0s;--max-opacity:0.09;"></div>
+        <div class="bokeh-dot" style="width:120px;height:120px;background:var(--amber);left:75%;top:40%;--dur:13s;--delay:2s;--max-opacity:0.1;"></div>
+        <div class="bokeh-dot" style="width:90px;height:90px;background:var(--cyan);left:55%;top:15%;--dur:9s;--delay:4s;--max-opacity:0.08;"></div>
+        <div class="bokeh-dot" style="width:200px;height:200px;background:var(--amber);left:85%;top:65%;--dur:14s;--delay:1s;--max-opacity:0.06;"></div>
+        <div class="bokeh-dot" style="width:60px;height:60px;background:var(--cyan);left:35%;top:70%;--dur:7s;--delay:3s;--max-opacity:0.12;"></div>
+      </div>
+
+      <!-- Content -->
+      <div class="hero-content">
+
+        <p class="hero-kicker" aria-label="Event discovery platform">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/>
+          </svg>
+          Events for every vibe
+        </p>
+
+        <h1 class="hero-title" id="hero-title">
+          Find parties that <em>actually</em> get you
+        </h1>
+
+        <p class="hero-sub">
+          Tell us what you're into — music, atmosphere, crowd, energy. We'll show you what's happening tonight that matches your vibe.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#cta" class="btn btn-cyan btn-lg">Discover Events</a>
+          <a href="#how" class="btn btn-ghost btn-lg">Take the Quiz</a>
+        </div>
+
+        <div class="hero-social-proof">
+          <div class="stat-badge">
+            <span class="dot" aria-hidden="true"></span>
+            <span>1,200+ people finding their crowd tonight</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="hero-scroll" aria-hidden="true">
+        <div class="scroll-mouse"></div>
+        <span>Scroll</span>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         WHY THIS MATTERS
+    ═══════════════════════════════════════════════════ -->
+    <section class="why section" id="why" aria-labelledby="why-title">
+      <div class="container">
+
+        <div class="reveal">
+          <span class="section-eyebrow">Why Choose Your Party</span>
+          <h2 class="section-title" id="why-title">Stop guessing. Start going.</h2>
+          <hr class="divider" aria-hidden="true">
+        </div>
+
+        <div class="why-grid stagger-children">
+
+          <!-- Card 1 -->
+          <article class="card card-accent-left reveal">
+            <div class="icon-badge" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="22" height="22">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z"/>
+              </svg>
+            </div>
+            <h3 class="why-card-title">Recommendations just for you</h3>
+            <p class="why-card-body">Stop scrolling endlessly. Tell us what you like and we'll show you events that match your vibe — not the generic stuff, the stuff you'll actually enjoy.</p>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="card card-accent-left reveal">
+            <div class="icon-badge" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="22" height="22">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/>
+              </svg>
+            </div>
+            <h3 class="why-card-title">Find your crowd</h3>
+            <p class="why-card-body">Discover venues and events where people who share your interests actually hang out. Show up knowing you're in the right room.</p>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="card card-accent-left reveal">
+            <div class="icon-badge" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="22" height="22">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+            </div>
+            <h3 class="why-card-title">See what's on tonight</h3>
+            <p class="why-card-body">Know what's happening in your area, right now, based on what you actually enjoy. Concerts, parties, open mics, club nights — whatever fits your mood.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         HOW IT WORKS
+    ═══════════════════════════════════════════════════ -->
+    <section class="how section" id="how" aria-labelledby="how-title">
+      <div class="container">
+
+        <div class="how-header reveal">
+          <span class="section-eyebrow">The Process</span>
+          <h2 class="section-title" id="how-title">From quiz to night out in minutes</h2>
+          <p class="section-subtitle">No complicated setup. No endless registration. Just honest answers and a night worth remembering.</p>
+        </div>
+
+        <ol class="how-steps stagger-children" role="list">
+
+          <li class="step reveal">
+            <div class="step-circle" aria-hidden="true">1</div>
+            <h3 class="step-label">Answer questions like a human</h3>
+            <p class="step-body">Be honest about what you actually like. No judgment, no wrong answers. We're not grading you.</p>
+          </li>
+
+          <li class="step reveal">
+            <div class="step-circle" aria-hidden="true">2</div>
+            <h3 class="step-label">We find events that match</h3>
+            <p class="step-body">Our algorithm surfaces parties and events aligned with your vibe — not just what's popular, what's right for you.</p>
+          </li>
+
+          <li class="step reveal">
+            <div class="step-circle" aria-hidden="true">3</div>
+            <h3 class="step-label">See what's on tonight</h3>
+            <p class="step-body">Browse recommended events in your area with real details — venue, vibe, what to expect when you show up.</p>
+          </li>
+
+          <li class="step reveal">
+            <div class="step-circle" aria-hidden="true">4</div>
+            <h3 class="step-label">Go out and find your people</h3>
+            <p class="step-body">Show up, meet others who share your interests, have a night. It's simpler than it sounds.</p>
+          </li>
+
+        </ol>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         SOCIAL PROOF
+    ═══════════════════════════════════════════════════ -->
+    <section class="proof section" id="proof" aria-labelledby="proof-title">
+      <div class="container">
+
+        <div class="reveal">
+          <span class="section-eyebrow">People finding their nights</span>
+          <h2 class="section-title" id="proof-title">You're not the only one looking</h2>
+          <hr class="divider" aria-hidden="true">
+        </div>
+
+        <div class="proof-grid">
+
+          <!-- Stats column -->
+          <div class="proof-stats stagger-children">
+
+            <div class="proof-stat reveal">
+              <p class="proof-stat-number"><em>3,200</em>+</p>
+              <p class="proof-stat-label">people discovered new favorite venues this month</p>
+            </div>
+
+            <div class="proof-stat reveal">
+              <p class="proof-stat-number"><em>50</em>+</p>
+              <p class="proof-stat-label">events matched with people in your city right now</p>
+            </div>
+
+            <div class="proof-stat reveal">
+              <p class="proof-stat-number"><em>9 in 10</em></p>
+              <p class="proof-stat-label">say they found events they wouldn't have found otherwise</p>
+            </div>
+
+          </div>
+
+          <!-- Testimonials column -->
+          <div class="testimonials stagger-children">
+
+            <article class="testimonial-card reveal" aria-label="Testimonial from Alex, Portland">
+              <blockquote class="testimonial-quote">
+                "I thought I'd be alone with my taste in music. Turns out there's a whole crowd at The Ballroom every Thursday."
+              </blockquote>
+              <p class="testimonial-attribution">Alex — Portland, OR</p>
+            </article>
+
+            <article class="testimonial-card reveal" aria-label="Testimonial from Jordan, Austin">
+              <blockquote class="testimonial-quote">
+                "This helped me find venues I actually wanted to go to. I'd been using the same two bars for two years."
+              </blockquote>
+              <p class="testimonial-attribution">Jordan — Austin, TX</p>
+            </article>
+
+            <article class="testimonial-card reveal" aria-label="Testimonial from Sam, Chicago">
+              <blockquote class="testimonial-quote">
+                "I took the quiz expecting nothing. Ended up at an open mic that became my favorite Thursday night thing."
+              </blockquote>
+              <p class="testimonial-attribution">Sam — Chicago, IL</p>
+            </article>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         FAQ
+    ═══════════════════════════════════════════════════ -->
+    <section class="faq section" id="faq" aria-labelledby="faq-title">
+      <div class="container">
+
+        <div class="faq-layout">
+
+          <!-- Sticky label -->
+          <div class="faq-sticky reveal">
+            <span class="section-eyebrow">FAQ</span>
+            <h2 class="section-title" id="faq-title">Questions you probably have</h2>
+            <hr class="divider" aria-hidden="true">
+            <p class="section-subtitle">Honest answers. No corporate speak.</p>
+          </div>
+
+          <!-- Accordion -->
+          <div role="list" id="faq-list" aria-label="Frequently asked questions">
+
+            <div class="faq-item" role="listitem" data-open="false">
+              <button
+                class="faq-question"
+                aria-expanded="false"
+                aria-controls="faq-1-answer"
+                id="faq-1-question"
+              >
+                Is this really based on my vibe?
+                <span class="faq-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="faq-answer" id="faq-1-answer" role="region" aria-labelledby="faq-1-question">
+                <p class="faq-answer-inner">Yes. We ask questions about what you actually like — music, atmosphere, crowd, energy — and match you with events that fit. No algorithm judgment, just discovery.</p>
+              </div>
+            </div>
+
+            <div class="faq-item" role="listitem" data-open="false">
+              <button
+                class="faq-question"
+                aria-expanded="false"
+                aria-controls="faq-2-answer"
+                id="faq-2-question"
+              >
+                What kind of events are on here?
+                <span class="faq-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="faq-answer" id="faq-2-answer" role="region" aria-labelledby="faq-2-question">
+                <p class="faq-answer-inner">Concerts, parties, festivals, open mics, club nights, venue events — whatever's happening in your area that matches your interests. Big names and hidden gems.</p>
+              </div>
+            </div>
+
+            <div class="faq-item" role="listitem" data-open="false">
+              <button
+                class="faq-question"
+                aria-expanded="false"
+                aria-controls="faq-3-answer"
+                id="faq-3-question"
+              >
+                Can I really meet people?
+                <span class="faq-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="faq-answer" id="faq-3-answer" role="region" aria-labelledby="faq-3-question">
+                <p class="faq-answer-inner">Absolutely. You'll be at events with people who share your interests. Whether you connect with them is up to you — we just put you in the right room.</p>
+              </div>
+            </div>
+
+            <div class="faq-item" role="listitem" data-open="false">
+              <button
+                class="faq-question"
+                aria-expanded="false"
+                aria-controls="faq-4-answer"
+                id="faq-4-question"
+              >
+                How is this different from other event apps?
+                <span class="faq-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="faq-answer" id="faq-4-answer" role="region" aria-labelledby="faq-4-question">
+                <p class="faq-answer-inner">We don't just list events. We recommend events based on your actual preferences. It's like having a friend who knows your taste and tells you what's on — instead of a wall of everything happening everywhere.</p>
+              </div>
+            </div>
+
+            <div class="faq-item" role="listitem" data-open="false">
+              <button
+                class="faq-question"
+                aria-expanded="false"
+                aria-controls="faq-5-answer"
+                id="faq-5-question"
+              >
+                Is my data private?
+                <span class="faq-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="faq-answer" id="faq-5-answer" role="region" aria-labelledby="faq-5-question">
+                <p class="faq-answer-inner">Yes. We're not selling your data or tracking you across the web. Your preferences stay between you and us. Simple as that.</p>
+              </div>
+            </div>
+
+            <div class="faq-item" role="listitem" data-open="false">
+              <button
+                class="faq-question"
+                aria-expanded="false"
+                aria-controls="faq-6-answer"
+                id="faq-6-question"
+              >
+                What if I'm into weird stuff?
+                <span class="faq-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                  </svg>
+                </span>
+              </button>
+              <div class="faq-answer" id="faq-6-answer" role="region" aria-labelledby="faq-6-question">
+                <p class="faq-answer-inner">That's the point. We find events for every taste, every interest, every vibe. Weird is good. Weird means there's a scene out there waiting for you — we'll help you find it.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         FINAL CTA
+    ═══════════════════════════════════════════════════ -->
+    <section class="cta-section section" id="cta" aria-labelledby="cta-title">
+      <div class="container">
+        <div class="cta-inner reveal">
+          <span class="section-eyebrow">Ready?</span>
+          <h2 class="cta-title" id="cta-title">Start discovering parties tonight</h2>
+          <p class="cta-sub">See what's happening in your area based on what you actually like. Takes about two minutes.</p>
+          <a href="#" class="btn btn-amber btn-lg" aria-label="Discover events near you tonight">Discover Events Now</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+
+        <a href="#" class="nav-logo" aria-label="Choose Your Party — home">
+          <div class="nav-logo-mark" aria-hidden="true">✦</div>
+          <div class="nav-logo-text">
+            Choose Your Party
+            <span>Event Discovery</span>
+          </div>
+        </a>
+
+        <nav aria-label="Footer navigation">
+          <ul class="footer-links" role="list">
+            <li><a href="#" class="footer-link">About</a></li>
+            <li><a href="#" class="footer-link">Contact</a></li>
+            <li><a href="#" class="footer-link">Privacy</a></li>
+            <li><a href="#" class="footer-link">Terms</a></li>
+          </ul>
+        </nav>
+
+        <p class="footer-copy">
+          &copy; <span id="year"></span> Choose Your Party. All rights reserved.
+        </p>
+
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

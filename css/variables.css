@@ -1,0 +1,92 @@
+:root {
+  /* ─── Brand Colors ─────────────────────────────────────── */
+  --navy:        #1a1a3e;
+  --navy-light:  #252550;
+  --navy-dark:   #0d0d24;
+  --navy-mid:    #1f1f48;
+  --cyan:        #60a5fa;
+  --cyan-bright: #93c5fd;
+  --cyan-dim:    #3b82f6;
+  --amber:       #f59e0b;
+  --amber-warm:  #fbbf24;
+  --amber-deep:  #d97706;
+  --white:       #ffffff;
+  --off-white:   #f8f8fc;
+  --muted:       rgba(255 255 255 / 0.55);
+  --subtle:      rgba(255 255 255 / 0.08);
+  --alert-red:   #ef4444;
+
+  /* ─── Typography ───────────────────────────────────────── */
+  --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans:  'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --text-hero:  clamp(2.75rem, 6vw, 3.75rem); /* 44–60px */
+  --text-xl:    clamp(2rem, 3.5vw, 2.75rem);  /* 32–44px */
+  --text-lg:    clamp(1.5rem, 2.5vw, 1.875rem); /* 24–30px */
+  --text-md:    1.25rem;  /* 20px */
+  --text-base:  1rem;     /* 16px */
+  --text-sm:    0.9375rem; /* 15px */
+  --text-xs:    0.8125rem; /* 13px */
+
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-semibold: 600;
+  --weight-bold:    700;
+
+  /* ─── Spacing (8px grid) ────────────────────────────────── */
+  --space-1:  0.25rem;  /*  4px */
+  --space-2:  0.5rem;   /*  8px */
+  --space-3:  0.75rem;  /* 12px */
+  --space-4:  1rem;     /* 16px */
+  --space-5:  1.25rem;  /* 20px */
+  --space-6:  1.5rem;   /* 24px */
+  --space-8:  2rem;     /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+  --space-32: 8rem;     /* 128px */
+
+  /* ─── Breakpoints (reference only — use in media queries) ─ */
+  /* mobile:  < 768px  */
+  /* tablet:  768px – 1024px */
+  /* desktop: > 1024px */
+
+  /* ─── Borders & Radii ───────────────────────────────────── */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  20px;
+  --radius-pill: 9999px;
+
+  /* ─── Shadows ───────────────────────────────────────────── */
+  --shadow-sm: 0 1px 3px rgba(0 0 0 / 0.3);
+  --shadow-md: 0 4px 16px rgba(0 0 0 / 0.4);
+  --shadow-lg: 0 8px 32px rgba(0 0 0 / 0.5);
+  --shadow-glow-cyan:  0 0 24px rgba(96 165 250 / 0.25);
+  --shadow-glow-amber: 0 0 24px rgba(245 158 11 / 0.3);
+
+  /* ─── Z-index Scale ─────────────────────────────────────── */
+  --z-base:    0;
+  --z-raised:  10;
+  --z-overlay: 20;
+  --z-modal:   30;
+  --z-nav:     40;
+  --z-toast:   50;
+
+  /* ─── Transitions ───────────────────────────────────────── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --duration-fast:   150ms;
+  --duration-base:   250ms;
+  --duration-slow:   350ms;
+  --duration-reveal: 600ms;
+
+  /* ─── Layout ────────────────────────────────────────────── */
+  --max-width:      1200px;
+  --content-width:  760px;
+  --gutter:         clamp(1.25rem, 5vw, 3rem);
+  --section-pad:    clamp(4rem, 10vw, 7rem);
+  --nav-height:     72px;
+}
